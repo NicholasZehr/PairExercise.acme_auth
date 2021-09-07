@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const bcrypt = require('bcrypt');
 const { STRING } = Sequelize;
 const config = {
   logging: false,
@@ -18,6 +19,11 @@ const conn = new Sequelize(
 const User = conn.define('user', {
   username: STRING,
   password: STRING,
+});
+
+User.beforeCreate(async (user, options) => {
+  const hashedPassword = await bcrypt.hash(user.password, 10);
+  user.password = hashedPassword;
 });
 
 User.byToken = async (token) => {
@@ -41,10 +47,9 @@ User.authenticate = async ({ username, password }) => {
   const user = await User.findOne({
     where: {
       username,
-      password,
     },
   });
-  if (user) {
+  if (await bcrypt.compare(password, user.password)) {
     const token = await jwt.sign(
       { id: user.id, username: user.username },
       tokenSecret
