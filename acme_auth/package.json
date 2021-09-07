@@ -1,0 +1,29 @@
+{
+  "name": "pairexercise.jwtauthentication",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "JWT=SECRET_KEY nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicholasZehr/PairExercise.JWTAuthentication.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NicholasZehr/PairExercise.JWTAuthentication/issues"
+  },
+  "homepage": "https://github.com/NicholasZehr/PairExercise.JWTAuthentication#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.7.1",
+    "sequelize": "^6.6.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
