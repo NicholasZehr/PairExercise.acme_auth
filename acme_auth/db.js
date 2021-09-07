@@ -6,6 +6,44 @@ const config = {
 };
 const jwt = require('jsonwebtoken');
 
+const notes = [
+  {
+    text: 'This is a note',
+    userId: 1,
+  },
+  {
+    text: 'This is note#2',
+    userId: 1,
+  },
+  {
+    text: 'This is note#3',
+    userId: 1,
+  },
+  {
+    text: 'This is note#4',
+    userId: 2,
+  },
+  {
+    text: 'This is note#5',
+    userId: 2,
+  },
+  {
+    text: 'This is note#6',
+    userId: 2,
+  },
+  {
+    text: 'This is note#7',
+    userId: 3,
+  },
+  {
+    text: 'This is note#8',
+    userId: 3,
+  },
+  {
+    text: 'This is note#9',
+    userId: 3,
+  },
+];
 const tokenSecret = process.env.JWT;
 
 if (process.env.LOGGING) {
@@ -21,6 +59,9 @@ const User = conn.define('user', {
   password: STRING,
 });
 
+const Note = conn.define('note', {
+  text: Sequelize.STRING,
+});
 User.beforeCreate(async (user, options) => {
   const hashedPassword = await bcrypt.hash(user.password, 10);
   user.password = hashedPassword;
@@ -71,6 +112,7 @@ const syncAndSeed = async () => {
   const [lucy, moe, larry] = await Promise.all(
     credentials.map((credential) => User.create(credential))
   );
+  await Promise.all(notes.map((note) => Note.create(note)));
   return {
     users: {
       lucy,
@@ -79,6 +121,9 @@ const syncAndSeed = async () => {
     },
   };
 };
+
+User.hasMany(Note);
+Note.belongsTo(User);
 
 module.exports = {
   syncAndSeed,
